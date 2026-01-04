@@ -1,8 +1,10 @@
 package com.mk.usandosqlite
 
+import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -23,10 +25,14 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        banco = SQLiteDatabase.openOrCreateDatabase(
+        banco = openOrCreateDatabase(
             "dbfile.sqlite",
+            MODE_PRIVATE,
             null
             )
+
+        banco.execSQL("CREATE TABLE IF NOT EXISTS cadastro (_id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT, telefone TEXT)")
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -35,7 +41,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun btIncluirOnClick(view: View) {}
+    fun btIncluirOnClick(view: View) {
+        val registro = ContentValues()
+
+        registro.put("nome", binding.etNome.text.toString())
+        registro.put("telefone", binding.etTelefone.text.toString())
+
+        banco.insert("cadastro", null, registro)
+
+        Toast.makeText(this, "Registro inserido com sucesso", Toast.LENGTH_SHORT).show()
+
+    }
     fun btAlterarOnClick(view: View) {}
     fun btExcluirOnClick(view: View) {}
     fun btPesquisarOnClick(view: View) {}
