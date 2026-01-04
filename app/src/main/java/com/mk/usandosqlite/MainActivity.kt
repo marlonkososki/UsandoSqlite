@@ -52,8 +52,21 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, "Registro inserido com sucesso", Toast.LENGTH_SHORT).show()
 
     }
-    fun btAlterarOnClick(view: View) {}
-    fun btExcluirOnClick(view: View) {}
+    fun btAlterarOnClick(view: View) {
+        val registro = ContentValues()
+
+        registro.put("nome", binding.etNome.text.toString())
+        registro.put("telefone", binding.etTelefone.text.toString())
+
+        banco.update("cadastro", registro, "_id = ${binding.etCod.text.toString()}", null)
+
+        Toast.makeText(this, "Alteração realizada com sucesso", Toast.LENGTH_SHORT).show()
+    }
+    fun btExcluirOnClick(view: View) {
+        banco.delete("cadastro", "_id = ${binding.etCod.text.toString()}", null)
+
+        Toast.makeText(this, "Exclusão realizada com sucesso", Toast.LENGTH_SHORT).show()
+    }
     fun btPesquisarOnClick(view: View) {}
     fun btListarOnClick(view: View) {}
 }
