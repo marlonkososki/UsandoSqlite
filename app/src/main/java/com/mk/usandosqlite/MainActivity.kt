@@ -67,6 +67,48 @@ class MainActivity : AppCompatActivity() {
 
         Toast.makeText(this, "Exclusão realizada com sucesso", Toast.LENGTH_SHORT).show()
     }
-    fun btPesquisarOnClick(view: View) {}
-    fun btListarOnClick(view: View) {}
+    fun btPesquisarOnClick(view: View) {
+
+        val registro = banco.query(
+            "cadastro",
+            arrayOf("nome", "telefone"),
+            "_id = ${binding.etCod.text.toString()}",
+            null,
+            null,
+            null,
+            null
+        )
+
+        if (registro.moveToNext()) {
+            binding.etNome.setText(registro.getString(0))
+            binding.etTelefone.setText(registro.getString(1))
+        } else {
+            Toast.makeText(this, "Registro não encontrado", Toast.LENGTH_SHORT).show()
+        }
+
+    }
+    fun btListarOnClick(view: View) {
+        val registros = banco.query(
+            "cadastro",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+
+        val saida = StringBuilder()
+
+        while(registros.moveToNext()) {
+            val nome = registros.getString(1)
+            val telefone = registros.getString(2)
+
+            saida.append("Nome: $nome - Telefone: $telefone\n\n")
+
+        }
+
+        Toast.makeText(this, saida.toString(), Toast.LENGTH_SHORT).show()
+
+    }
 }
