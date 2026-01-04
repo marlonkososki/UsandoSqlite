@@ -9,13 +9,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.mk.usandosqlite.database.DatabaseHandler
 import com.mk.usandosqlite.databinding.ActivityMainBinding
+import com.mk.usandosqlite.entity.Cadastro
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    private lateinit var banco: SQLiteDatabase
+    private lateinit var banco: DatabaseHandler
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,14 +27,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        banco = openOrCreateDatabase(
-            "dbfile.sqlite",
-            MODE_PRIVATE,
-            null
-            )
-
-        banco.execSQL("CREATE TABLE IF NOT EXISTS cadastro (_id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT, telefone TEXT)")
-
+        banco = DatabaseHandler.getInstance(this)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -42,61 +37,50 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun btIncluirOnClick(view: View) {
-        val registro = ContentValues()
 
-        registro.put("nome", binding.etNome.text.toString())
-        registro.put("telefone", binding.etTelefone.text.toString())
+        val cadastro = Cadastro(
+            0,
+            binding.etNome.text.toString(),
+            binding.etTelefone.text.toString()
+        )
 
-        banco.insert("cadastro", null, registro)
+        banco.inserir(cadastro)
 
         Toast.makeText(this, "Registro inserido com sucesso", Toast.LENGTH_SHORT).show()
-
     }
     fun btAlterarOnClick(view: View) {
-        val registro = ContentValues()
 
-        registro.put("nome", binding.etNome.text.toString())
-        registro.put("telefone", binding.etTelefone.text.toString())
+        val cadastro = Cadastro(
+            binding.etCod.text.toString().toInt(),
+            binding.etNome.text.toString(),
+            binding.etTelefone.text.toString()
+        )
 
-        banco.update("cadastro", registro, "_id = ${binding.etCod.text.toString()}", null)
+        banco.alterar(cadastro)
 
         Toast.makeText(this, "Alteração realizada com sucesso", Toast.LENGTH_SHORT).show()
     }
     fun btExcluirOnClick(view: View) {
-        banco.delete("cadastro", "_id = ${binding.etCod.text.toString()}", null)
+        banco.excluir(binding.etCod.text.toString().toInt())
 
         Toast.makeText(this, "Exclusão realizada com sucesso", Toast.LENGTH_SHORT).show()
     }
     fun btPesquisarOnClick(view: View) {
 
-        val registro = banco.query(
-            "cadastro",
-            arrayOf("nome", "telefone"),
-            "_id = ${binding.etCod.text.toString()}",
-            null,
-            null,
-            null,
-            null
-        )
+        val registro = banco.pesquisar(binding.etCod.text.toString().toInt())
 
-        if (registro.moveToNext()) {
-            binding.etNome.setText(registro.getString(0))
-            binding.etTelefone.setText(registro.getString(1))
-        } else {
+        if (registro != null){
+            binding.etNome.setText(registro.nome)
+            binding.etTelefone.setText(registro.telefone)
+
+        }else{
+            binding.etNome.setText("")
+            binding.etTelefone.setText("")
             Toast.makeText(this, "Registro não encontrado", Toast.LENGTH_SHORT).show()
         }
-
     }
     fun btListarOnClick(view: View) {
-        val registros = banco.query(
-            "cadastro",
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-        )
+        val registros = banco.listar()
 
         val saida = StringBuilder()
 
@@ -109,6 +93,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         Toast.makeText(this, saida.toString(), Toast.LENGTH_SHORT).show()
-
     }
+
 }
