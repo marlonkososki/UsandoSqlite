@@ -14,6 +14,7 @@ class DatabaseHandler private constructor (context: Context) : SQLiteOpenHelper(
         const val DATABASE_NAME = "dbfile.sqlite"
         const val DATABASE_VERSION = 1
         const val TABLE_NAME = "cadastro"
+
         const val COLUMN_ID : String = "0"
         const val COLUMN_NOME : String = "1"
         const val COLUMN_TELEFONE : String = "2"
@@ -70,7 +71,7 @@ class DatabaseHandler private constructor (context: Context) : SQLiteOpenHelper(
 
         val registro = writableDatabase.query(
             TABLE_NAME,
-            arrayOf("nome", "telefone"),
+            arrayOf("_id", "nome", "telefone"),
             "_id = ${id}",
             null,
             null,
