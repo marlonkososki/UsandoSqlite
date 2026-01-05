@@ -1,11 +1,14 @@
 package com.mk.usandosqlite
 
+import android.database.Cursor
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import android.widget.SimpleCursorAdapter
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.mk.usandosqlite.database.DatabaseHandler
 import com.mk.usandosqlite.databinding.ActivityListarBinding
 
 class ListarActivity : AppCompatActivity() {
@@ -13,12 +16,18 @@ class ListarActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityListarBinding
 
+    private lateinit var banco: DatabaseHandler
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
         binding = ActivityListarBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        banco = DatabaseHandler.getInstance(this)
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.lvRegistros)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -31,9 +40,20 @@ class ListarActivity : AppCompatActivity() {
     }
 
     private fun initList() {
-        val lista = listOf<String>("Brasil", "Argentina", "Uruguai")
+//        val lista = listOf<String>("Brasil", "Argentina", "Uruguai")
+//
+//        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, lista)
 
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, lista)
+        val cursor: Cursor = banco.listar()
+
+        val adapter = SimpleCursorAdapter(
+            this,
+            android.R.layout.simple_list_item_2,
+            cursor,
+            arrayOf("nome", "telefone"),
+            intArrayOf(android.R.id.text1, android.R.id.text2),
+            0
+            )
 
         binding.lvRegistros.adapter = adapter
 
