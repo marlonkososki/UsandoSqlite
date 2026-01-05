@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.mk.usandosqlite.adapter.MeuAdapter
 import com.mk.usandosqlite.database.DatabaseHandler
 import com.mk.usandosqlite.databinding.ActivityListarBinding
 
@@ -40,20 +41,10 @@ class ListarActivity : AppCompatActivity() {
     }
 
     private fun initList() {
-//        val lista = listOf<String>("Brasil", "Argentina", "Uruguai")
-//
-//        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, lista)
 
         val cursor: Cursor = banco.listar()
 
-        val adapter = SimpleCursorAdapter(
-            this,
-            android.R.layout.simple_list_item_2,
-            cursor,
-            arrayOf("nome", "telefone"),
-            intArrayOf(android.R.id.text1, android.R.id.text2),
-            0
-            )
+        val adapter = MeuAdapter(this, cursor)
 
         binding.lvRegistros.adapter = adapter
 
