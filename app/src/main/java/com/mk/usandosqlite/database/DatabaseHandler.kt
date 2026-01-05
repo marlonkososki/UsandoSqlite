@@ -14,9 +14,9 @@ class DatabaseHandler private constructor (context: Context) : SQLiteOpenHelper(
         const val DATABASE_NAME = "dbfile.sqlite"
         const val DATABASE_VERSION = 1
         const val TABLE_NAME = "cadastro"
-        const val COLUMN_ID = "0"
-        const val COLUMN_NOME = "0"
-        const val COLUMN_TELEFONE = "0"
+        const val COLUMN_ID : String = "0"
+        const val COLUMN_NOME : String = "1"
+        const val COLUMN_TELEFONE : String = "2"
 
         @Volatile
         private var instance: DatabaseHandler? = null
@@ -81,8 +81,8 @@ class DatabaseHandler private constructor (context: Context) : SQLiteOpenHelper(
         var retorno: Cadastro? = null
 
         if (registro.moveToNext()) {
-            val nome = registro.getString(1)
-            val telefone = registro.getString(2)
+            val nome = registro.getString(COLUMN_NOME.toInt())
+            val telefone = registro.getString(COLUMN_TELEFONE.toInt())
 
             retorno = Cadastro(id, nome, telefone)
 

@@ -85,8 +85,8 @@ class MainActivity : AppCompatActivity() {
         val saida = StringBuilder()
 
         while(registros.moveToNext()) {
-            val nome = registros.getString(1)
-            val telefone = registros.getString(2)
+            val nome = registros.getString(DatabaseHandler.COLUMN_NOME.toInt())
+            val telefone = registros.getString(DatabaseHandler.COLUMN_TELEFONE.toInt())
 
             saida.append("Nome: $nome - Telefone: $telefone\n\n")
 
