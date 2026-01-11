@@ -84,27 +84,5 @@ class MainActivity : AppCompatActivity() {
 
         val intent = Intent(this, ListarActivity::class.java)
         startActivity(intent)
-
-
     }
-
-
-
-///*        val registros = banco.listar()
-//
-//        val saida = StringBuilder()
-//
-//        while(registros.moveToNext()) {
-//            val nome = registros.getString(DatabaseHandler.COLUMN_NOME.toInt())
-//            val telefone = registros.getString(DatabaseHandler.COLUMN_TELEFONE.toInt())
-//
-//            saida.append("Nome: $nome - Telefone: $telefone\n\n")
-//
-//        }
-//
-//        Toast.makeText(this, saida.toString(), Toast.LENGTH_SHORT).show()*/
-
-
-
-
 }
