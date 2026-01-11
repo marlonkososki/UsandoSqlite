@@ -52,29 +52,37 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun btIncluirOnClick(view: View) {
+    fun btSalvarOnClick(view: View) {
 
-        val cadastro = Cadastro(
-            0,
-            binding.etNome.text.toString(),
-            binding.etTelefone.text.toString()
-        )
+        var msg = ""
 
-        banco.inserir(cadastro)
+        if (binding.etCod.text.toString().isEmpty()){
 
-        Toast.makeText(this, "Registro inserido com sucesso", Toast.LENGTH_SHORT).show()
-    }
-    fun btAlterarOnClick(view: View) {
+            val cadastro = Cadastro(
+                0,
+                binding.etNome.text.toString(),
+                binding.etTelefone.text.toString()
+            )
 
-        val cadastro = Cadastro(
-            binding.etCod.text.toString().toInt(),
-            binding.etNome.text.toString(),
-            binding.etTelefone.text.toString()
-        )
+            banco.inserir(cadastro)
 
-        banco.alterar(cadastro)
+            msg = "Registro inserido com sucesso"
 
-        Toast.makeText(this, "Alteração realizada com sucesso", Toast.LENGTH_SHORT).show()
+        } else {
+
+            val cadastro = Cadastro(
+                binding.etCod.text.toString().toInt(),
+                binding.etNome.text.toString(),
+                binding.etTelefone.text.toString()
+            )
+
+            banco.alterar(cadastro)
+
+            msg = "Registro alterado com sucesso"
+
+        }
+
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }
     fun btExcluirOnClick(view: View) {
         banco.excluir(binding.etCod.text.toString().toInt())
