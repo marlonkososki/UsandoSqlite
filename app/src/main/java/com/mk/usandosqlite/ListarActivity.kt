@@ -1,7 +1,9 @@
 package com.mk.usandosqlite
 
+import android.content.Intent
 import android.database.Cursor
 import android.os.Bundle
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.SimpleCursorAdapter
 import androidx.activity.enableEdgeToEdge
@@ -11,6 +13,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.mk.usandosqlite.adapter.MeuAdapter
 import com.mk.usandosqlite.database.DatabaseHandler
 import com.mk.usandosqlite.databinding.ActivityListarBinding
+import kotlinx.coroutines.MainScope
 
 class ListarActivity : AppCompatActivity() {
 
@@ -47,6 +50,13 @@ class ListarActivity : AppCompatActivity() {
         val adapter = MeuAdapter(this, cursor)
 
         binding.lvRegistros.adapter = adapter
+
+    }
+
+    fun fabIncluirOnClick(view: View) {
+
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
 
     }
 }

@@ -47,7 +47,8 @@ class MainActivity : AppCompatActivity() {
             binding.etTelefone.setText(intent.getStringExtra("telefone"))
 
         } else {
-
+            binding.btExcluir.visibility = View.GONE
+            binding.btPesquisar.visibility = View.GONE
         }
 
     }
@@ -83,11 +84,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+
+        finish()
     }
     fun btExcluirOnClick(view: View) {
         banco.excluir(binding.etCod.text.toString().toInt())
 
         Toast.makeText(this, "Exclusão realizada com sucesso", Toast.LENGTH_SHORT).show()
+
+        finish()
     }
     fun btPesquisarOnClick(view: View) {
 
