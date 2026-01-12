@@ -36,8 +36,11 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        initView()
+    }
 
+    override fun onStart() {
+        super.onStart()
+        initView()
     }
 
     private fun initView() {
