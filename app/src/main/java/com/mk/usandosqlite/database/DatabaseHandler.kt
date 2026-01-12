@@ -92,12 +92,19 @@ class DatabaseHandler private constructor (context: Context) : SQLiteOpenHelper(
     }
 
     fun listar() : Cursor {
+        return listar("")
+    }
+
+    fun listar(filtro: String) : Cursor {
+
+        val selection = if(filtro.isNotEmpty()) "nome LIKE ?" else null
+        val selectionArgs = if(filtro.isNotEmpty()) arrayOf("%$filtro%") else null
 
         val registros: Cursor = writableDatabase.query(
             TABLE_NAME,
             null,
-            null,
-            null,
+            selection,
+            selectionArgs,
             null,
             null,
             null
@@ -105,6 +112,9 @@ class DatabaseHandler private constructor (context: Context) : SQLiteOpenHelper(
 
         return registros
     }
+
+
+
 
 
 }

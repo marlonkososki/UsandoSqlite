@@ -4,8 +4,7 @@ import android.content.Intent
 import android.database.Cursor
 import android.os.Bundle
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.SimpleCursorAdapter
+import android.widget.SearchView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -13,7 +12,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.mk.usandosqlite.adapter.MeuAdapter
 import com.mk.usandosqlite.database.DatabaseHandler
 import com.mk.usandosqlite.databinding.ActivityListarBinding
-import kotlinx.coroutines.MainScope
+
 
 class ListarActivity : AppCompatActivity() {
 
@@ -21,6 +20,9 @@ class ListarActivity : AppCompatActivity() {
     private lateinit var binding: ActivityListarBinding
 
     private lateinit var banco: DatabaseHandler
+
+    private lateinit var adapter: MeuAdapter
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,8 +42,21 @@ class ListarActivity : AppCompatActivity() {
         }
 
 
+        binding.svFiltro.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
 
-    }
+            override fun onQueryTextChange(newText: String?): Boolean {
+                initList(newText ?: "")
+                return true
+            }
+
+        })
+
+
+
+        }
 
 
     override fun onStart() {
@@ -49,11 +64,11 @@ class ListarActivity : AppCompatActivity() {
         initList()
     }
 
-    private fun initList() {
+    private fun initList(filtro: String = "") {
 
-        val cursor: Cursor = banco.listar()
+        val cursor: Cursor = banco.listar(filtro)
 
-        val adapter = MeuAdapter(this, cursor)
+        adapter = MeuAdapter(this, cursor)
 
         binding.lvRegistros.adapter = adapter
 
